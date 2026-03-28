@@ -1,0 +1,60 @@
+PROGRAM InsertionSortProdukRekursif
+
+DEKLARASI:
+    DATA_PRODUK: array[0..n-1] of record
+        nama: string
+        harga: integer
+    end record
+    
+    i, j: integer
+    key: record
+
+PROSEDUR insertion_sort_recursive(arr: array, n: integer)
+
+    // Base case: array dengan 0 atau 1 elemen sudah terurut
+    JIKA n <= 1 MAKA
+        KEMBALI
+    AKHIR-JIKA
+    
+    // Rekursif: urutkan n-1 elemen pertama
+    insertion_sort_recursive(arr, n-1)
+    
+    // Elemen terakhir dari array saat ini
+    last_element ← arr[n-1]
+    j ← n-2
+    
+    // Geser elemen yang lebih besar ke kanan
+    SELAMA j >= 0 DAN lowercase(arr[j].nama) > lowercase(last_element.nama) LAKUKAN
+        arr[j + 1] ← arr[j]
+        j ← j - 1
+    AKHIR-SELAMA
+    
+    // Tempatkan elemen terakhir pada posisi yang tepat
+    arr[j + 1] ← last_element
+
+PROSEDUR insertion_sort_produk()
+    // Fungsi wrapper untuk mengurutkan DATA_PRODUK
+    insertion_sort_recursive(DATA_PRODUK, panjang(DATA_PRODUK))
+    
+ALGORITMA UTAMA:
+    // Contoh penggunaan
+    DATA_PRODUK ← [
+        {"nama": "Laptop", "harga": 8000000},
+        {"nama": "Mouse", "harga": 150000},
+        {"nama": "Keyboard", "harga": 350000},
+        {"nama": "Monitor", "harga": 2500000},
+        {"nama": "Headset", "harga": 300000}
+    ]
+    
+    TAMPILKAN "Data sebelum diurutkan:"
+    UNTUK i ← 0 SAMPAI panjang(DATA_PRODUK)-1 LAKUKAN
+        TAMPILKAN "- " + DATA_PRODUK[i].nama + ": Rp" + DATA_PRODUK[i].harga
+    AKHIR-UNTUK
+    
+    // Panggil fungsi pengurutan
+    insertion_sort_produk()
+    
+    TAMPILKAN "Data setelah diurutkan berdasarkan nama:"
+    UNTUK i ← 0 SAMPAI panjang(DATA_PRODUK)-1 LAKUKAN
+        TAMPILKAN "- " + DATA_PRODUK[i].nama + ": Rp" + DATA_PRODUK[i].harga
+    AKHIR-UNTUK

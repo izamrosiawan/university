@@ -1,0 +1,6 @@
+﻿<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="120" rx="28" fill="#1f4fd1" />
+  <circle cx="60" cy="52" r="26" fill="#ffd54a" />
+  <rect x="26" y="76" width="68" height="20" rx="10" fill="#ffffff" />
+  <text x="60" y="58" text-anchor="middle" font-family="Plus Jakarta Sans, Arial, sans-serif" font-size="20" fill="#1f4fd1" font-weight="700">SDN</text>
+</svg>
