@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="hero">
+            <div class="stars"></div>
+            <h1 class="main-title">Happy Birthday!</h1>
+            <p class="subtitle">Selamat ulang tahun anak kecil</p>
+            <div class="heart-animation">❤️</div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('memories')">Kenangan</button>
+            <button class="tab-btn" onclick="showTab('wishes')">Ucapan</button>
+            <button class="tab-btn" onclick="showTab('letter')">Surat</button>
+        </nav>
+
+        <!-- Memories Section -->
+        <section id="memories" class="tab-content active">
+            <h2>Kenangan Indah Kita</h2>
+            <div class="memory-timeline">
+                <div class="memory-item">
+                    <div class="memory-date">Dari izaam</div>
+                    <div class="memory-content">
+                        <p>Halo Amel semoga kesan kecil ini bisa buat kamu bahagia di hari spesialmu.</p>
+                    </div>
+                </div>
+                <div class="memory-item">
+                    <div class="memory-date">Secret Admirer</div>
+                    <div class="memory-content">
+                        <p>Jarak kita memang jauh, namun aku gapernah bohong soal rasa ku dulu.</p>
+                    </div>
+                </div>
+                <div class="memory-item">
+                    <div class="memory-date">Pembelajaran</div>
+                    <div class="memory-content">
+                        <p>Meskipun jalan kita berbeda sekarang, aku belajar banyak hal dari dirimu yang ngebuatku menjadi pribadi yang lebih baik.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Birthday Wishes Section -->
+        <section id="wishes" class="tab-content">
+            <h2>Ucapan Ulang Tahun</h2>
+            <div class="wishes-container">
+                <div class="wish-card">
+                    <h3>Selamat Ulang Tahun!</h3>
+                    <p>Semoga di tahun yang baru ini, kamu selalu diberikan kesehatan, kebahagiaan, dan kesuksesan dalam segala hal yang kamu lakukan.</p>
+                </div>
+                <div class="wish-card">
+                    <h3>Untuk Masa Depanmu</h3>
+                    <p>Semoga semua impian dan cita-citamu dapat tercapai di kampus impianmu itu. Kamu layak mendapatkan yang terbaik di dunia ini.</p>
+                </div>
+                <div class="wish-card">
+                    <h3>Dari Hati</h3>
+                    <p>Meskipun kita sudah tidak bersama, aku tetap mendoakan yang terbaik untukmu. Terima kasih untuk semua kenangan indah yang pernah kita buat.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Letter Section -->
+        <section id="letter" class="tab-content">
+            <h2>Kepada Jiwa yang Sedang Berjuang</h2>
+            <div class="letter-content">
+                <div class="letter-header">
+                    <p>Untuk seseorang yang pernah berarti...</p>
+                </div>
+                <div class="letter-body">
+                    <p>Selamat ulang tahun! 🎉</p>
+                    
+                    <p>Di hari yang begitu istimewa ini, saat bintang di langit merayakan satu putaran baru usiamu, aku ingin mengirimkan sebuah senandung dari tempatku berdiri—di tepi fajar yang baru, jauh dari bayang-bayang masa lalu.</p>
+                    
+                    <p>Semoga usia baru ini membawamu pada kebahagiaan yang sejati, yang terajut dari benang-benang cita-cita yang kau genggam erat. Semoga kau menemukan pelabuhan yang tak hanya nyaman, tetapi juga abadi, yang mengerti setiap sunyi di jiwamu.</p>
+                    
+                    <p>Meskipun jalan kita sudah berbeda, aku akan selalu mendoakan yang terbaik untukmu. Kamu layak mendapatkan cinta yang tulus dan kebahagiaan yang sempurna.</p>
+                    
+                    <p>Sekali lagi, selamat ulang tahun.</p>
+                </div>
+                <div class="letter-signature">
+                    <p>Dengan doa terbaik,</p>
+                    <p><em>izaminanotherlife</em></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Elements -->
+        <div class="interactive-section">
+            <button class="surprise-btn" onclick="showSurprise()">Klik</button>
+            <div id="surprise" class="surprise-box">
+                <h3> Surprise! </h3>
+                <p>Semoga hari ulang tahunmu dipenuhi dengan kebahagiaan</p>
+                <div class="confetti"></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Dibuat dengan rasa syukur untuk hari istimewamu</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

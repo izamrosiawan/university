@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografis: Tren Industri & Pasar Data di Indonesia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Infographic Narrative Plan:
+        1.  Hook: Indonesia's booming digital & data scene.
+        2.  Key Market Metrics: Visualize internet, financial inclusion, digital economy growth.
+        3.  AI's Role: Highlight AI investment and skill demand.
+        4.  Data Career Landscape: Compare Data Scientist, Analyst, Engineer roles (salaries, skills).
+        5.  Market Dynamics: Emphasize demand, competition, regulations.
+        6.  Conclusion: Reinforce opportunity.
+        Structure: Single-page scrollable infographic with clear sections using Tailwind CSS grid.
+    -->
+    <!-- Visualization & Content Choices:
+        - Internet Penetration (79%), Financial Inclusion (84%): Goal: Inform. Viz: Donut Charts (Chart.js). Justification: Clear percentage representation. NO SVG.
+        - Digital Economy Projections (USD 150B 2025, USD 200-360B 2030): Goal: Change/Inform. Viz: Bar Chart (Chart.js). Justification: Shows growth over time. NO SVG.
+        - Microsoft AI Investment (USD 1.7B): Goal: Inform. Viz: Single Big Number (HTML/Tailwind). Justification: Emphasizes magnitude. NO SVG.
+        - AI Literacy Demand (78% leaders): Goal: Inform. Viz: Donut Chart (Chart.js). Justification: Clear percentage. NO SVG.
+        - Data Role Salary Comparison (Scientist, Analyst, Engineer): Goal: Compare. Viz: Grouped Bar Chart (Chart.js). Justification: Direct comparison of ranges. NO SVG.
+        - Data Role Skills/Responsibilities: Goal: Organize/Compare. Viz: HTML/Tailwind cards. Justification: Structured textual comparison. NO SVG.
+        - High Demand/Competition/Regulation: Goal: Inform. Viz: Text with Unicode icons (HTML/Tailwind). Justification: Concise textual points with visual cues. NO SVG.
+        All textual content derived from Section 2 of the source report.
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F7FAFC; /* Light gray background */
+            color: #073B4C; /* Dark Blue/Text as primary text color */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px; /* Adjusted for potentially smaller charts in a grid */
+            margin-left: auto;
+            margin-right: auto;
+            height: 280px; /* Base height */
+            max-height: 350px;
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .chart-container {
+                height: 320px;
+                max-height: 400px;
+            }
+        }
+        .stat-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #118AB2; /* Blue from palette */
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: #073B4C; /* Dark Blue */
+            margin-bottom: 2.5rem;
+            text-align: center;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .primary-accent { color: #FF6B6B; } /* Red */
+        .secondary-accent { color: #FFD166; } /* Yellow */
+        .tertiary-accent { color: #06D6A0; } /* Green */
+        .quaternary-accent { color: #118AB2; } /* Blue */
+
+        .card-role {
+            background-color: white;
+            border: 1px solid #E2E8F0;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-role:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .role-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #118AB2; /* Blue */
+            margin-bottom: 0.75rem;
+        }
+        .role-description {
+            font-size: 0.9rem;
+            color: #4A5568; /* Gray-700 */
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        .role-skills-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #073B4C; /* Dark Blue */
+            margin-bottom: 0.5rem;
+        }
+        .role-skill {
+            display: inline-block;
+            background-color: #EBF4FF; /* Light blue for skills */
+            color: #118AB2; /* Blue for skill text */
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .salary-range {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #06D6A0; /* Green */
+            margin-top: 1rem;
+        }
+         .sticky-nav {
+            position: sticky;
+            top: 0;
+            background-color: rgba(255, 255, 255, 0.95);
+            z-index: 50;
+            padding: 0.75rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+        }
+        .nav-link {
+            padding: 0.5rem 1rem;
+            color: #118AB2;
+            font-weight: 500;
+            border-radius: 0.375rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            background-color: #118AB2;
+            color: white;
+        }
+
+    </style>
+</head>
+<body class="bg-slate-50">
+
+    <nav id="navbar" class="sticky-nav hidden md:block">
+        <div class="container mx-auto px-4">
+            <ul class="flex justify-center space-x-3">
+                <li><a href="#introduction" class="nav-link">Pendahuluan</a></li>
+                <li><a href="#market-indicators" class="nav-link">Indikator Pasar</a></li>
+                <li><a href="#ai-impact" class="nav-link">Dampak AI</a></li>
+                <li><a href="#data-roles" class="nav-link">Peran Data</a></li>
+                <li><a href="#market-dynamics" class="nav-link">Dinamika Pasar</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-6 md:p-12">
+
+        <section id="introduction" class="py-12 md:py-16 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                Dunia <span class="primary-accent">Sains Data</span> Indonesia:
+                <span class="block quaternary-accent">Peluang di Tengah Dinamika Digital</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+                Indonesia menyaksikan pertumbuhan eksponensial dalam transformasi digital, menciptakan gelombang permintaan talenta data. Laporan ini mengupas tren industri, riset pasar, dan lanskap karir di bidang sains data yang dinamis.
+            </p>
+        </section>
+
+        <section id="market-indicators" class="py-12 md:py-16 bg-white rounded-xl shadow-xl my-10">
+            <div class="px-6">
+                <h2 class="section-title">Indikator Kunci Pasar Digital Indonesia</h2>
+                <p class="section-subtitle">Memahami fondasi pertumbuhan ekosistem data melalui penetrasi digital dan proyeksi ekonomi.</p>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
+                    <div class="stat-card flex flex-col items-center justify-center h-full">
+                        <h3 class="text-xl font-semibold mb-2 text-gray-700">Penetrasi Internet (2024)</h3>
+                        <div class="chart-container h-48 md:h-56">
+                            <canvas id="internetPenetrationChart"></canvas>
+                        </div>
+                        <p class="text-3xl font-bold tertiary-accent mt-3">~79%</p>
+                        <p class="text-sm text-gray-500">Sumber: [1]</p>
+                    </div>
+                    <div class="stat-card flex flex-col items-center justify-center h-full">
+                        <h3 class="text-xl font-semibold mb-2 text-gray-700">Inklusi Keuangan (2024)</h3>
+                        <div class="chart-container h-48 md:h-56">
+                            <canvas id="financialInclusionChart"></canvas>
+                        </div>
+                        <p class="text-3xl font-bold tertiary-accent mt-3">~84%</p>
+                         <p class="text-sm text-gray-500">Sumber: [1]</p>
+                    </div>
+                    <div class="md:col-span-2 lg:col-span-1 stat-card flex flex-col items-center justify-center h-full">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-700">Proyeksi Ekonomi Digital (PDB)</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <p class="text-4xl font-bold quaternary-accent">USD 150 M</p>
+                                <p class="text-md text-gray-600">di tahun 2025 <span class="text-xs">(Sumber: [2])</span></p>
+                            </div>
+                            <div>
+                                <p class="text-4xl font-bold quaternary-accent">USD 200-360 M</p>
+                                <p class="text-md text-gray-600">di tahun 2030 <span class="text-xs">(Sumber: [1])</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="mt-10">
+                    <h3 class="text-xl font-semibold mb-3 text-center text-gray-700">Pertumbuhan Ekonomi Digital (Proyeksi PDB)</h3>
+                    <div class="chart-container" style="max-width:700px; height: 350px;">
+                        <canvas id="digitalEconomyChart"></canvas>
+                    </div>
+                    <p class="text-center text-sm text-gray-500 mt-2">Visualisasi proyeksi kontribusi ekonomi digital terhadap PDB Indonesia.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="ai-impact" class="py-12 md:py-16">
+            <h2 class="section-title">Peran Sentral <span class="primary-accent">AI</span> & Investasi Teknologi</h2>
+            <p class="section-subtitle">Kecerdasan Buatan (AI) mendorong inovasi dan menarik investasi signifikan, membentuk kebutuhan keahlian masa depan.</p>
+            <div class="grid md:grid-cols-2 gap-8 items-stretch">
+                <div class="stat-card">
+                    <h3 class="text-xl font-semibold mb-2 text-gray-700">Investasi Microsoft (Cloud & AI)</h3>
+                    <p class="text-5xl font-bold quaternary-accent my-4">USD 1,7 M</p>
+                    <p class="text-gray-600">Komitmen untuk pengembangan infrastruktur di Indonesia.</p>
+                    <p class="text-sm text-gray-500 mt-2">Sumber: [3]</p>
+                </div>
+                <div class="stat-card">
+                    <h3 class="text-xl font-semibold mb-2 text-gray-700">Kebutuhan Literasi AI</h3>
+                     <div class="chart-container h-40 md:h-48 my-2">
+                        <canvas id="aiLiteracyChart"></canvas>
+                    </div>
+                    <p class="text-gray-600"><span class="font-bold text-2xl tertiary-accent">78%</span> pemimpin global berencana menambah peran terkait AI pada 2025.</p>
+                    <p class="text-sm text-gray-500 mt-2">Sumber: [4]</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="data-roles" class="py-12 md:py-16 bg-sky-50 rounded-xl shadow-xl my-10">
+            <div class="px-6">
+                <h2 class="section-title">Lanskap Profesional Data di Indonesia</h2>
+                <p class="section-subtitle">Perbandingan peran kunci di bidang data: Data Scientist, Data Analyst, dan Data Engineer, termasuk tanggung jawab, keahlian, dan estimasi gaji awal.</p>
+                <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+                    <div class="card-role">
+                        <h3 class="role-title">Data Scientist</h3>
+                        <p class="role-description">Mengolah data mentah, membangun model machine learning & algoritma prediktif untuk keputusan strategis.</p>
+                        <p class="role-skills-title">Keahlian Inti:</p>
+                        <span class="role-skill">Python</span><span class="role-skill">R</span><span class="role-skill">SQL</span><span class="role-skill">Statistik</span><span class="role-skill">Machine Learning</span><span class="role-skill">TensorFlow</span><span class="role-skill">PyTorch</span>
+                        <p class="salary-range">Gaji Awal: Rp 10jt – 15jt/bulan</p>
+                        <p class="text-xs text-gray-400 mt-1">Sumber: [7, 8, 9]</p>
+                    </div>
+                    <div class="card-role">
+                        <h3 class="role-title">Data Analyst</h3>
+                        <p class="role-description">Mengumpulkan, membersihkan, menganalisis data, membuat laporan & visualisasi untuk stakeholder.</p>
+                        <p class="role-skills-title">Keahlian Inti:</p>
+                        <span class="role-skill">Excel (Lanjutan)</span><span class="role-skill">SQL</span><span class="role-skill">Tableau/Power BI</span><span class="role-skill">Python/R (Dasar)</span><span class="role-skill">Statistik</span>
+                        <p class="salary-range">Gaji Awal: Rp 6jt – 12jt/bulan (Jakarta)</p>
+                        <p class="text-xs text-gray-400 mt-1">Sumber: [10, 11]</p>
+                    </div>
+                    <div class="card-role">
+                        <h3 class="role-title">Data Engineer</h3>
+                        <p class="role-description">Merancang, membangun, & memelihara infrastruktur data (pipeline ETL, data warehouse/lake).</p>
+                        <p class="role-skills-title">Keahlian Inti:</p>
+                        <span class="role-skill">Python</span><span class="role-skill">SQL</span><span class="role-skill">ETL</span><span class="role-skill">Data Warehousing</span><span class="role-skill">Big Data (Spark, Hadoop)</span>
+                        <p class="salary-range">Gaji Awal: Rp 7.1jt – 12.7jt/bulan</p>
+                        <p class="text-xs text-gray-400 mt-1">Sumber: [12, 13]</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold mb-4 text-center text-gray-700">Perbandingan Estimasi Gaji Awal</h3>
+                    <div class="chart-container" style="max-width:800px; height: 400px;">
+                        <canvas id="roleSalaryComparisonChart"></canvas>
+                    </div>
+                    <p class="text-center text-sm text-gray-500 mt-2">Grafik ini membandingkan estimasi kisaran gaji awal untuk ketiga peran data utama.</p>
+                </div>
+
+                 <div class="mt-10 p-6 bg-blue-50 rounded-lg">
+                    <h4 class="text-lg font-semibold text-center text-blue-700 mb-3">Siklus & Kolaborasi Peran Data</h4>
+                    <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6 text-center">
+                        <div class="p-4 bg-white rounded-lg shadow-md w-full md:w-1/3">
+                            <p class="text-2xl mb-2">⚙️</p>
+                            <h5 class="font-semibold text-blue-600">Data Engineer</h5>
+                            <p class="text-xs text-gray-600">Membangun & memelihara infrastruktur agar data siap dianalisis.</p>
+                        </div>
+                        <div class="text-blue-500 text-2xl font-bold hidden md:block">&rarr;</div>
+                        <div class="p-4 bg-white rounded-lg shadow-md w-full md:w-1/3">
+                             <p class="text-2xl mb-2">📊</p>
+                            <h5 class="font-semibold text-blue-600">Data Analyst</h5>
+                            <p class="text-xs text-gray-600">Menganalisis, menemukan tren, membuat laporan & visualisasi.</p>
+                        </div>
+                         <div class="text-blue-500 text-2xl font-bold hidden md:block">&rarr;</div>
+                        <div class="p-4 bg-white rounded-lg shadow-md w-full md:w-1/3">
+                            <p class="text-2xl mb-2">🧠</p>
+                            <h5 class="font-semibold text-blue-600">Data Scientist</h5>
+                            <p class="text-xs text-gray-600">Menggunakan statistik lanjutan & ML untuk prediksi & solusi otomatis.</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-center text-blue-700 mt-4">Ketiga peran ini saling terkait dan berkolaborasi erat dalam siklus pengolahan data untuk menghasilkan keputusan bisnis yang bernilai.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="market-dynamics" class="py-12 md:py-16">
+            <h2 class="section-title">Dinamika Pasar Tenaga Kerja Data</h2>
+            <p class="section-subtitle">Faktor-faktor penting yang membentuk lanskap permintaan dan persaingan di industri data Indonesia.</p>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="stat-card">
+                    <p class="text-4xl mb-3">📈</p>
+                    <h3 class="text-xl font-semibold mb-2 quaternary-accent">Permintaan Tinggi</h3>
+                    <p class="text-gray-600">Kebutuhan profesional data terus meningkat seiring digitalisasi & volume data masif.</p>
+                     <p class="text-xs text-gray-400 mt-1">Ref: [5]</p>
+                </div>
+                <div class="stat-card">
+                     <p class="text-4xl mb-3">⚔️</p>
+                    <h3 class="text-xl font-semibold mb-2 primary-accent">Pasar Kompetitif</h3>
+                    <p class="text-gray-600">Tingginya minat memicu persaingan. Keahlian spesifik & portofolio kuat menjadi pembeda.</p>
+                    <p class="text-xs text-gray-400 mt-1">Ref: [5]</p>
+                </div>
+                <div class="stat-card">
+                    <p class="text-4xl mb-3">📜</p>
+                    <h3 class="text-xl font-semibold mb-2 tertiary-accent">Regulasi & Kualitas Data</h3>
+                    <p class="text-gray-600">Fokus pemerintah pada perlindungan data pribadi dan peningkatan kualitas data industri.</p>
+                    <p class="text-xs text-gray-400 mt-1">Ref: [1, 6]</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-12 md:py-16 text-center">
+             <h2 class="text-3xl font-bold mb-4 quaternary-accent">Prospek Cerah Menanti</h2>
+            <p class="text-lg text-gray-700 max-w-2xl mx-auto">
+                Industri data di Indonesia menawarkan peluang karir yang signifikan. Dengan pemahaman tren, pengembangan keahlian yang tepat, dan adaptabilitas, masa depan profesional data sangat menjanjikan.
+            </p>
+        </section>
+    </div>
+
+    <footer class="text-center py-8 border-t border-gray-200">
+        <p class="text-sm text-gray-600">Infografis berdasarkan "Rencana Karir Sains Data Izam".</p>
+        <p class="text-xs text-gray-500">Dirancang untuk tujuan ilustrasi tren industri dan pasar.</p>
+    </footer>
+
+<script>
+    const chartColors = {
+        red: '#FF6B6B',
+        yellow: '#FFD166',
+        green: '#06D6A0',
+        blue: '#118AB2',
+        darkBlue: '#073B4C',
+        lightGray: '#E2E8F0'
+    };
+
+    function wrapLabel(label, maxWidth) {
+        if (label.length <= maxWidth) {
+            return label;
+        }
+        const words = label.split(' ');
+        let currentLine = '';
+        const lines = [];
+        for (const word of words) {
+            if ((currentLine + word).length <= maxWidth) {
+                currentLine += (currentLine ? ' ' : '') + word;
+            } else {
+                if (currentLine) lines.push(currentLine);
+                currentLine = word;
+            }
+        }
+        if (currentLine) lines.push(currentLine);
+        return lines;
+    }
+
+    const defaultTooltipCallbacks = {
+        title: function(tooltipItems) {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+              return label.join(' ');
+            } else {
+              return label;
+            }
+        }
+    };
+
+    // Chart 1: Internet Penetration
+    const internetCtx = document.getElementById('internetPenetrationChart').getContext('2d');
+    new Chart(internetCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Penetrasi Internet', 'Belum Terjangkau'],
+            datasets: [{
+                data: [79, 21],
+                backgroundColor: [chartColors.green, chartColors.lightGray],
+                borderColor: [chartColors.green, chartColors.lightGray],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '70%',
+            plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: defaultTooltipCallbacks }
+            }
+        }
+    });
+
+    // Chart 2: Financial Inclusion
+    const financialCtx = document.getElementById('financialInclusionChart').getContext('2d');
+    new Chart(financialCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Inklusi Keuangan', 'Belum Terjangkau'],
+            datasets: [{
+                data: [84, 16],
+                backgroundColor: [chartColors.blue, chartColors.lightGray],
+                borderColor: [chartColors.blue, chartColors.lightGray],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '70%',
+            plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: defaultTooltipCallbacks }
+            }
+        }
+    });
+    
+    // Chart: Digital Economy Projection (Bar Chart)
+    const digitalEconomyCtx = document.getElementById('digitalEconomyChart').getContext('2d');
+    new Chart(digitalEconomyCtx, {
+        type: 'bar',
+        data: {
+            labels: ['2025 (Estimasi)', ['2030 (Estimasi', 'Rentang Bawah)'], ['2030 (Estimasi', 'Rentang Atas)']],
+            datasets: [{
+                label: 'Kontribusi PDB (USD Miliar)',
+                data: [150, 200, 360],
+                backgroundColor: [chartColors.yellow, chartColors.blue, chartColors.darkBlue],
+                borderColor: [chartColors.yellow, chartColors.blue, chartColors.darkBlue],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'USD Miliar' }
+                },
+                x: {
+                    ticks: {
+                        callback: function(value, index, values) {
+                            const label = this.getLabelForValue(value);
+                            return label; // Already an array for multiline
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: defaultTooltipCallbacks }
+            }
+        }
+    });
+
+
+    // Chart 3: AI Literacy Demand
+    const aiLiteracyCtx = document.getElementById('aiLiteracyChart').getContext('2d');
+    new Chart(aiLiteracyCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Pemimpin Menambah Peran AI', 'Lainnya'],
+            datasets: [{
+                data: [78, 22],
+                backgroundColor: [chartColors.red, chartColors.lightGray],
+                borderColor: [chartColors.red, chartColors.lightGray],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '70%',
+            plugins: {
+                legend: { display: false },
+                tooltip: { 
+                    callbacks: defaultTooltipCallbacks 
+                }
+            }
+        }
+    });
+
+    // Chart 4: Role Salary Comparison
+    const roleSalaryCtx = document.getElementById('roleSalaryComparisonChart').getContext('2d');
+    new Chart(roleSalaryCtx, {
+        type: 'bar',
+        data: {
+            labels: [wrapLabel('Data Scientist', 16), wrapLabel('Data Analyst (Jakarta)', 16), wrapLabel('Data Engineer', 16)],
+            datasets: [
+                {
+                    label: 'Gaji Minimum (Rp Juta)',
+                    data: [10, 6, 7.1],
+                    backgroundColor: chartColors.green,
+                    borderColor: chartColors.green,
+                    borderWidth: 1
+                },
+                {
+                    label: 'Gaji Maksimum (Rp Juta)',
+                    data: [15, 12, 12.7],
+                    backgroundColor: chartColors.blue,
+                    borderColor: chartColors.blue,
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Estimasi Gaji (Rp Juta per Bulan)' }
+                },
+                x: {
+                     ticks: {
+                        callback: function(value, index, values) {
+                            const label = this.getLabelForValue(value);
+                             if (Array.isArray(label)) { // If it's already an array from wrapLabel
+                                return label;
+                            }
+                            if (typeof label === 'string' && label.length > 16) {
+                                return wrapLabel(label,16);
+                            }
+                            return label;
+                        }
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                     callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                              return label.join(' ');
+                            }
+                            return label;
+                        },
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += 'Rp ' + context.parsed.y + ' Juta';
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Smooth scroll for nav links & active state
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id]');
+
+    function changeNavActiveState() {
+        let index = sections.length;
+
+        while(--index && window.scrollY + 100 < sections[index].offsetTop) {}
+        
+        navLinks.forEach((link) => link.classList.remove('active'));
+        if (navLinks[index]) {
+            navLinks[index].classList.add('active');
+        }
+    }
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80, // Adjusted for sticky nav height
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    window.addEventListener('scroll', changeNavActiveState);
+    changeNavActiveState(); // Initial call
+
+</script>
+</body>
+</html>
+
+

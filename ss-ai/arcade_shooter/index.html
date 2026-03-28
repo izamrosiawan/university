@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Arcade Shooter - Siap Main</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="ui">
+    <h1>Arcade Shooter</h1>
+    <div class="panel">
+      <div>Skor: <span id="score">0</span></div>
+      <div>Nyawa: <span id="lives">3</span></div>
+      <div>Level: <span id="level">1</span></div>
+      <div>High Score: <span id="hiscore">0</span></div>
+    </div>
+    <div class="help">
+      Gerak: ← → atau A / D &nbsp; | &nbsp; Tembak: Spasi / Klik &nbsp; | &nbsp; Pause: P
+    </div>
+  </div>
+
+  <canvas id="game" width="480" height="720"></canvas>
+
+  <div id="overlay" class="overlay hidden">
+    <div class="dialog">
+      <h2 id="ov-title">Game Over</h2>
+      <p id="ov-msg"></p>
+      <button id="btn-start">Main Lagi</button>
+      <button id="btn-resume" class="hidden">Lanjut</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

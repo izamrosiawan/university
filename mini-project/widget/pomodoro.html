@@ -1,0 +1,1135 @@
+<!doctype html>
+<html lang="id">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+        <title>Pomodoro Tracker</title>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap");
+
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            :root {
+                --w: #ef4444;
+                --s: #22c55e;
+                --l: #3b82f6;
+                --bg: #0f0f13;
+                --sf: #1a1a24;
+                --sf2: #22222f;
+                --bd: #2e2e40;
+                --tx: #e2e2f0;
+                --mt: #6b6b8a;
+                --ac: #ef4444;
+            }
+
+            body {
+                font-family: "Inter", sans-serif;
+                background: var(--bg);
+                color: var(--tx);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+            }
+
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background:
+                    radial-gradient(
+                        ellipse 60% 40% at 20% 10%,
+                        rgba(239, 68, 68, 0.13) 0%,
+                        transparent 60%
+                    ),
+                    radial-gradient(
+                        ellipse 50% 35% at 80% 85%,
+                        rgba(59, 130, 246, 0.1) 0%,
+                        transparent 60%
+                    );
+                pointer-events: none;
+            }
+
+            /* ── CARD ─────────────────────────────────────────────── */
+            .card {
+                width: 100%;
+                max-width: 480px;
+                background: var(--sf);
+                border: 1px solid var(--bd);
+                border-radius: 24px;
+                padding: 32px 28px 28px;
+                display: flex;
+                flex-direction: column;
+                gap: 22px;
+                box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+                position: relative;
+                overflow: hidden;
+            }
+            .card::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: linear-gradient(90deg, var(--ac), transparent 80%);
+                transition: background 0.4s;
+            }
+            .card.ms::before {
+                background: linear-gradient(90deg, var(--s), transparent 80%);
+            }
+            .card.ml::before {
+                background: linear-gradient(90deg, var(--l), transparent 80%);
+            }
+
+            /* ── HEADER ───────────────────────────────────────────── */
+            .header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .logo {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .logo-icon {
+                width: 36px;
+                height: 36px;
+                background: var(--ac);
+                border-radius: 10px;
+                display: grid;
+                place-items: center;
+                font-size: 18px;
+                transition: background 0.4s;
+                flex-shrink: 0;
+            }
+            .ms .logo-icon {
+                background: var(--s);
+            }
+            .ml .logo-icon {
+                background: var(--l);
+            }
+            .logo-text h1 {
+                font-size: 15px;
+                font-weight: 700;
+                line-height: 1;
+            }
+            .logo-text span {
+                font-size: 11px;
+                color: var(--mt);
+            }
+
+            .stats {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+            }
+            .stat {
+                text-align: center;
+            }
+            .stat-v {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 18px;
+                font-weight: 700;
+                color: var(--ac);
+                line-height: 1;
+                transition: color 0.4s;
+            }
+            .ms .stat-v {
+                color: var(--s);
+            }
+            .ml .stat-v {
+                color: var(--l);
+            }
+            .stat-l {
+                font-size: 10px;
+                color: var(--mt);
+                margin-top: 2px;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+            }
+            .dv {
+                width: 1px;
+                height: 28px;
+                background: var(--bd);
+            }
+
+            /* ── TABS ─────────────────────────────────────────────── */
+            .tabs {
+                display: flex;
+                background: var(--sf2);
+                border: 1px solid var(--bd);
+                border-radius: 12px;
+                padding: 4px;
+                gap: 4px;
+            }
+            .tab {
+                flex: 1;
+                padding: 8px 6px;
+                border: none;
+                background: transparent;
+                border-radius: 9px;
+                color: var(--mt);
+                font-family: "Inter", sans-serif;
+                font-size: 12px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+                white-space: nowrap;
+            }
+            .tab.active {
+                background: var(--ac);
+                color: #fff;
+            }
+            .ms .tab.active {
+                background: var(--s);
+            }
+            .ml .tab.active {
+                background: var(--l);
+            }
+            .tab:not(.active):hover {
+                color: var(--tx);
+            }
+
+            /* ── RING TIMER ───────────────────────────────────────── */
+            .timer-sec {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 18px;
+            }
+            .ring-wrap {
+                position: relative;
+                width: 220px;
+                height: 220px;
+            }
+            .ring-svg {
+                width: 100%;
+                height: 100%;
+                transform: rotate(-90deg);
+            }
+            .ring-bg {
+                fill: none;
+                stroke: var(--sf2);
+                stroke-width: 8;
+            }
+            .ring-prog {
+                fill: none;
+                stroke: var(--ac);
+                stroke-width: 8;
+                stroke-linecap: round;
+                transition:
+                    stroke-dashoffset 0.9s linear,
+                    stroke 0.4s;
+            }
+            .ms .ring-prog {
+                stroke: var(--s);
+            }
+            .ml .ring-prog {
+                stroke: var(--l);
+            }
+            .ring-center {
+                position: absolute;
+                inset: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+            }
+            .time-disp {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 52px;
+                font-weight: 700;
+                letter-spacing: -2px;
+                line-height: 1;
+            }
+            .mode-lbl {
+                font-size: 11px;
+                font-weight: 600;
+                color: var(--mt);
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+            }
+
+            /* ── PROGRESS DOTS ────────────────────────────────────── */
+            .dots {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+            }
+            .dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: var(--bd);
+                transition: all 0.35s;
+            }
+            .dot.on {
+                background: var(--ac);
+                box-shadow: 0 0 8px var(--ac);
+            }
+            .ms .dot.on {
+                background: var(--s);
+                box-shadow: 0 0 8px var(--s);
+            }
+            .ml .dot.on {
+                background: var(--l);
+                box-shadow: 0 0 8px var(--l);
+            }
+            .dsep {
+                width: 16px;
+                height: 2px;
+                background: var(--bd);
+                border-radius: 2px;
+            }
+
+            /* ── CONTROLS ─────────────────────────────────────────── */
+            .ctrls {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+            .btn-ic {
+                width: 44px;
+                height: 44px;
+                border: 1px solid var(--bd);
+                background: var(--sf2);
+                border-radius: 12px;
+                display: grid;
+                place-items: center;
+                cursor: pointer;
+                color: var(--mt);
+                font-size: 18px;
+                transition: all 0.2s;
+            }
+            .btn-ic:hover {
+                border-color: var(--tx);
+                color: var(--tx);
+            }
+            .btn-main {
+                flex: 1;
+                height: 48px;
+                border: none;
+                border-radius: 14px;
+                background: var(--ac);
+                color: #fff;
+                font-family: "Inter", sans-serif;
+                font-size: 14px;
+                font-weight: 700;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                transition: all 0.2s;
+                letter-spacing: 0.02em;
+            }
+            .ms .btn-main {
+                background: var(--s);
+            }
+            .ml .btn-main {
+                background: var(--l);
+            }
+            .btn-main:hover {
+                filter: brightness(1.12);
+                transform: translateY(-1px);
+            }
+            .btn-main:active {
+                transform: translateY(0);
+            }
+
+            /* ── SOUND ROW ────────────────────────────────────────── */
+            .snd-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 10px 14px;
+                background: var(--sf2);
+                border: 1px solid var(--bd);
+                border-radius: 10px;
+            }
+            .snd-lbl {
+                font-size: 12px;
+                font-weight: 500;
+                color: var(--mt);
+            }
+            .toggle {
+                width: 36px;
+                height: 20px;
+                background: var(--bd);
+                border-radius: 10px;
+                position: relative;
+                cursor: pointer;
+                transition: background 0.25s;
+                flex-shrink: 0;
+            }
+            .toggle.on {
+                background: var(--ac);
+            }
+            .ms .toggle.on {
+                background: var(--s);
+            }
+            .ml .toggle.on {
+                background: var(--l);
+            }
+            .toggle::after {
+                content: "";
+                position: absolute;
+                top: 3px;
+                left: 3px;
+                width: 14px;
+                height: 14px;
+                background: #fff;
+                border-radius: 50%;
+                transition: left 0.25s;
+            }
+            .toggle.on::after {
+                left: 19px;
+            }
+
+            /* ── TASK SECTION ─────────────────────────────────────── */
+            .task-sec {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .sec-ttl {
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--mt);
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+            }
+            .task-row {
+                display: flex;
+                gap: 8px;
+            }
+            .task-inp {
+                flex: 1;
+                height: 40px;
+                background: var(--sf2);
+                border: 1px solid var(--bd);
+                border-radius: 10px;
+                color: var(--tx);
+                font-family: "Inter", sans-serif;
+                font-size: 13px;
+                padding: 0 14px;
+                outline: none;
+                transition: border-color 0.2s;
+            }
+            .task-inp::placeholder {
+                color: var(--mt);
+            }
+            .task-inp:focus {
+                border-color: var(--ac);
+            }
+            .ms .task-inp:focus {
+                border-color: var(--s);
+            }
+            .ml .task-inp:focus {
+                border-color: var(--l);
+            }
+            .btn-add {
+                height: 40px;
+                padding: 0 16px;
+                background: var(--ac);
+                border: none;
+                border-radius: 10px;
+                color: #fff;
+                font-family: "Inter", sans-serif;
+                font-size: 13px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+                white-space: nowrap;
+            }
+            .ms .btn-add {
+                background: var(--s);
+            }
+            .ml .btn-add {
+                background: var(--l);
+            }
+            .btn-add:hover {
+                filter: brightness(1.1);
+            }
+
+            /* ── TASK LIST ────────────────────────────────────────── */
+            .task-list {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                max-height: 210px;
+                overflow-y: auto;
+                scrollbar-width: thin;
+                scrollbar-color: var(--bd) transparent;
+            }
+            .ti {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background: var(--sf2);
+                border: 1px solid var(--bd);
+                border-radius: 10px;
+                padding: 10px 12px;
+                transition: all 0.2s;
+                animation: sli 0.2s ease;
+                cursor: pointer;
+            }
+            .ti:hover {
+                border-color: var(--mt);
+            }
+            .ti.act {
+                border-color: var(--ac);
+                background: rgba(239, 68, 68, 0.07);
+            }
+            .ms .ti.act {
+                border-color: var(--s);
+                background: rgba(34, 197, 94, 0.07);
+            }
+            .ml .ti.act {
+                border-color: var(--l);
+                background: rgba(59, 130, 246, 0.07);
+            }
+            .ti.done {
+                opacity: 0.45;
+            }
+
+            @keyframes sli {
+                from {
+                    opacity: 0;
+                    transform: translateY(-6px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .tchk {
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                border: 2px solid var(--bd);
+                flex-shrink: 0;
+                display: grid;
+                place-items: center;
+                transition: all 0.2s;
+            }
+            .ti.done .tchk {
+                background: var(--ac);
+                border-color: var(--ac);
+            }
+            .tchk::after {
+                content: "✓";
+                font-size: 10px;
+                color: #fff;
+                opacity: 0;
+                transition: opacity 0.2s;
+            }
+            .ti.done .tchk::after {
+                opacity: 1;
+            }
+            .ttxt {
+                flex: 1;
+                font-size: 13px;
+                font-weight: 500;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                transition: all 0.2s;
+            }
+            .ti.done .ttxt {
+                text-decoration: line-through;
+                color: var(--mt);
+            }
+            .tpom {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 10px;
+                color: var(--mt);
+                background: var(--bg);
+                border-radius: 5px;
+                padding: 2px 6px;
+                flex-shrink: 0;
+            }
+            .tdel {
+                background: none;
+                border: none;
+                color: var(--mt);
+                cursor: pointer;
+                font-size: 13px;
+                padding: 2px 4px;
+                border-radius: 6px;
+                transition: all 0.2s;
+                flex-shrink: 0;
+            }
+            .tdel:hover {
+                background: rgba(239, 68, 68, 0.15);
+                color: #ef4444;
+            }
+
+            .empty {
+                text-align: center;
+                padding: 20px 0;
+                color: var(--mt);
+                font-size: 13px;
+            }
+            .empty .eicon {
+                font-size: 26px;
+                display: block;
+                margin-bottom: 6px;
+            }
+
+            /* ── TOAST ────────────────────────────────────────────── */
+            .toast {
+                position: fixed;
+                bottom: 28px;
+                left: 50%;
+                transform: translateX(-50%) translateY(100px);
+                background: var(--sf);
+                border: 1px solid var(--bd);
+                border-radius: 12px;
+                padding: 12px 20px;
+                font-size: 13px;
+                font-weight: 500;
+                color: var(--tx);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+                transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+                z-index: 999;
+                white-space: nowrap;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                max-width: 90vw;
+            }
+            .toast.show {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            /* ── ANIMATIONS ───────────────────────────────────────── */
+            @keyframes pulse {
+                0%,
+                100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.55;
+                }
+            }
+            .pulsing .time-disp {
+                animation: pulse 2s ease-in-out infinite;
+            }
+
+            /* ── SCROLLBAR ────────────────────────────────────────── */
+            ::-webkit-scrollbar {
+                width: 4px;
+            }
+            ::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: var(--bd);
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="card" id="card">
+            <!-- HEADER -->
+            <div class="header">
+                <div class="logo">
+                    <div class="logo-icon" id="logoIcon">🍅</div>
+                    <div class="logo-text">
+                        <h1>Pomodoro</h1>
+                        <span>Focus Tracker</span>
+                    </div>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-v" id="sTot">0</div>
+                        <div class="stat-l">Selesai</div>
+                    </div>
+                    <div class="dv"></div>
+                    <div class="stat">
+                        <div class="stat-v" id="sMin">0</div>
+                        <div class="stat-l">Menit</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODE TABS -->
+            <div class="tabs">
+                <button class="tab active" id="tw" onclick="setMode('work')">
+                    🍅 Fokus (25m)
+                </button>
+                <button class="tab" id="ts" onclick="setMode('short')">
+                    ☕ Pendek (5m)
+                </button>
+                <button class="tab" id="tl" onclick="setMode('long')">
+                    🌙 Panjang (15m)
+                </button>
+            </div>
+
+            <!-- TIMER RING -->
+            <div class="timer-sec" id="timerSec">
+                <div class="ring-wrap">
+                    <svg class="ring-svg" viewBox="0 0 220 220">
+                        <circle class="ring-bg" cx="110" cy="110" r="98" />
+                        <circle
+                            class="ring-prog"
+                            cx="110"
+                            cy="110"
+                            r="98"
+                            id="rp"
+                            stroke-dasharray="615.75"
+                            stroke-dashoffset="0"
+                        />
+                    </svg>
+                    <div class="ring-center">
+                        <div class="time-disp" id="td">25:00</div>
+                        <div class="mode-lbl" id="ml">Waktu Fokus</div>
+                    </div>
+                </div>
+
+                <!-- CYCLE DOTS -->
+                <div class="dots" id="dots"></div>
+
+                <!-- CONTROLS -->
+                <div class="ctrls">
+                    <button class="btn-ic" title="Reset" onclick="resetTimer()">
+                        &#8635;
+                    </button>
+                    <button class="btn-main" onclick="toggleTimer()">
+                        <span id="si">&#9654;</span>
+                        <span id="sl">Mulai</span>
+                    </button>
+                    <button
+                        class="btn-ic"
+                        title="Lewati"
+                        onclick="skipSession()"
+                    >
+                        &#9197;
+                    </button>
+                </div>
+            </div>
+
+            <!-- SOUND TOGGLE -->
+            <div class="snd-row">
+                <div class="snd-lbl">&#128276; Notifikasi Suara</div>
+                <div class="toggle on" id="tog" onclick="toggleSound()"></div>
+            </div>
+
+            <!-- TASKS -->
+            <div class="task-sec">
+                <div class="sec-ttl">&#128203; Tugas Hari Ini</div>
+                <div class="task-row">
+                    <input
+                        class="task-inp"
+                        id="tinp"
+                        placeholder="Tambah tugas baru..."
+                        maxlength="60"
+                        onkeydown="if (event.key === 'Enter') addTask();"
+                    />
+                    <button class="btn-add" onclick="addTask()">
+                        + Tambah
+                    </button>
+                </div>
+                <div class="task-list" id="tlist"></div>
+            </div>
+        </div>
+
+        <!-- TOAST -->
+        <div class="toast" id="toast">
+            <span id="tIcon">🍅</span>
+            <span id="tMsg">Sesi selesai!</span>
+        </div>
+
+        <script>
+            /* ───────────────────────────────────────────────────────
+   CONFIG
+─────────────────────────────────────────────────────── */
+            const MODES = {
+                work: { lbl: "Waktu Fokus", min: 25, cls: "", icon: "🍅" },
+                short: {
+                    lbl: "Istirahat Pendek",
+                    min: 5,
+                    cls: "ms",
+                    icon: "☕",
+                },
+                long: {
+                    lbl: "Istirahat Panjang",
+                    min: 15,
+                    cls: "ml",
+                    icon: "🌙",
+                },
+            };
+            const CIRC = 2 * Math.PI * 98; // ≈ 615.75
+            const CYCLE = 4; // pomos before long break
+
+            /* ───────────────────────────────────────────────────────
+   STATE
+─────────────────────────────────────────────────────── */
+            let mode = "work";
+            let totalSec = 25 * 60;
+            let rem = totalSec;
+            let running = false;
+            let iid = null;
+            let cycleCount = 0; // completed pomos in current cycle
+            let allPomos = 0; // lifetime completed pomos
+            let soundOn = true;
+            let tasks = [];
+            let nid = 0;
+            let activeId = null;
+            let toastTimer = null;
+
+            /* ───────────────────────────────────────────────────────
+   DOM REFS
+─────────────────────────────────────────────────────── */
+            const card = document.getElementById("card");
+            const tdEl = document.getElementById("td");
+            const mlEl = document.getElementById("ml");
+            const siEl = document.getElementById("si");
+            const slEl = document.getElementById("sl");
+            const rpEl = document.getElementById("rp");
+            const dotsEl = document.getElementById("dots");
+            const tinp = document.getElementById("tinp");
+            const tlist = document.getElementById("tlist");
+            const tog = document.getElementById("tog");
+            const toastEl = document.getElementById("toast");
+            const tIcon = document.getElementById("tIcon");
+            const tMsg = document.getElementById("tMsg");
+            const sTot = document.getElementById("sTot");
+            const sMin = document.getElementById("sMin");
+            const tsec = document.getElementById("timerSec");
+            const logoEl = document.getElementById("logoIcon");
+
+            /* ───────────────────────────────────────────────────────
+   AUDIO  (Web Audio API — zero external dependencies)
+─────────────────────────────────────────────────────── */
+            let actx = null;
+
+            function getCtx() {
+                if (!actx)
+                    actx = new (
+                        window.AudioContext || window.webkitAudioContext
+                    )();
+                return actx;
+            }
+
+            function playNotes(notes) {
+                if (!soundOn) return;
+                try {
+                    const ctx = getCtx();
+                    notes.forEach(({ f, t, d }) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.type = "sine";
+                        osc.frequency.value = f;
+                        const s = ctx.currentTime + t;
+                        gain.gain.setValueAtTime(0, s);
+                        gain.gain.linearRampToValueAtTime(0.22, s + 0.02);
+                        gain.gain.exponentialRampToValueAtTime(0.001, s + d);
+                        osc.start(s);
+                        osc.stop(s + d + 0.01);
+                    });
+                } catch (e) {
+                    /* browser may block until user interaction */
+                }
+            }
+
+            // C5-E5-G5 ascending  → "work session done"
+            const chimeWork = () =>
+                playNotes([
+                    { f: 523.25, t: 0, d: 0.32 },
+                    { f: 659.25, t: 0.15, d: 0.32 },
+                    { f: 783.99, t: 0.3, d: 0.45 },
+                ]);
+
+            // G5-E5-C5 descending → "rest time"
+            const chimeRest = () =>
+                playNotes([
+                    { f: 783.99, t: 0, d: 0.32 },
+                    { f: 659.25, t: 0.15, d: 0.32 },
+                    { f: 523.25, t: 0.3, d: 0.45 },
+                ]);
+
+            // Short tick for last 5 s countdown
+            const chimeTick = () => playNotes([{ f: 880, t: 0, d: 0.06 }]);
+
+            /* ───────────────────────────────────────────────────────
+   TIMER CORE
+─────────────────────────────────────────────────────── */
+            function toggleTimer() {
+                running ? pauseTimer() : startTimer();
+            }
+
+            function startTimer() {
+                running = true;
+                tsec.classList.add("pulsing");
+                siEl.innerHTML = "&#9646;&#9646;";
+                slEl.textContent = "Jeda";
+                iid = setInterval(tick, 1000);
+            }
+
+            function pauseTimer() {
+                running = false;
+                tsec.classList.remove("pulsing");
+                siEl.innerHTML = "&#9654;";
+                slEl.textContent = "Lanjut";
+                clearInterval(iid);
+            }
+
+            function resetTimer() {
+                clearInterval(iid);
+                running = false;
+                tsec.classList.remove("pulsing");
+                rem = totalSec;
+                siEl.innerHTML = "&#9654;";
+                slEl.textContent = "Mulai";
+                updDisp();
+                updRing();
+            }
+
+            function skipSession() {
+                clearInterval(iid);
+                running = false;
+                tsec.classList.remove("pulsing");
+                siEl.innerHTML = "&#9654;";
+                slEl.textContent = "Mulai";
+                onEnd(false);
+            }
+
+            function tick() {
+                if (rem > 0) {
+                    rem--;
+                    updDisp();
+                    updRing();
+                    if (rem <= 5 && rem > 0) chimeTick();
+                } else {
+                    clearInterval(iid);
+                    running = false;
+                    tsec.classList.remove("pulsing");
+                    siEl.innerHTML = "&#9654;";
+                    slEl.textContent = "Mulai";
+                    onEnd(true);
+                }
+            }
+
+            function onEnd(completed) {
+                if (mode === "work" && completed) {
+                    cycleCount++;
+                    allPomos++;
+                    sTot.textContent = allPomos;
+                    sMin.textContent = allPomos * 25;
+
+                    // credit active task
+                    if (activeId !== null) {
+                        const t = tasks.find((x) => x.id === activeId);
+                        if (t) {
+                            t.pom++;
+                            renderTasks();
+                        }
+                    }
+
+                    chimeRest();
+                    showToast(
+                        "🎉",
+                        "Pomodoro #" +
+                            allPomos +
+                            " selesai! Waktunya istirahat.",
+                    );
+
+                    if (cycleCount >= CYCLE) {
+                        cycleCount = 0;
+                        setMode("long");
+                    } else {
+                        setMode("short");
+                    }
+                } else if (mode !== "work" && completed) {
+                    chimeWork();
+                    showToast("💪", "Istirahat selesai! Ayo fokus kembali.");
+                    setMode("work");
+                } else {
+                    // skipped
+                    setMode(mode === "work" ? "short" : "work");
+                }
+            }
+
+            /* ───────────────────────────────────────────────────────
+   DISPLAY HELPERS
+─────────────────────────────────────────────────────── */
+            function updDisp() {
+                const m = String(Math.floor(rem / 60)).padStart(2, "0");
+                const s = String(rem % 60).padStart(2, "0");
+                tdEl.textContent = m + ":" + s;
+                document.title = m + ":" + s + " — Pomodoro";
+            }
+
+            function updRing() {
+                rpEl.style.strokeDashoffset = CIRC * (1 - rem / totalSec);
+            }
+
+            function updDots() {
+                dotsEl.innerHTML = "";
+                for (let i = 0; i < CYCLE; i++) {
+                    if (i > 0) {
+                        const sep = document.createElement("div");
+                        sep.className = "dsep";
+                        dotsEl.appendChild(sep);
+                    }
+                    const dot = document.createElement("div");
+                    dot.className = "dot" + (i < cycleCount ? " on" : "");
+                    dotsEl.appendChild(dot);
+                }
+            }
+
+            /* ───────────────────────────────────────────────────────
+   MODE
+─────────────────────────────────────────────────────── */
+            function setMode(m) {
+                mode = m;
+                totalSec = MODES[m].min * 60;
+                rem = totalSec;
+
+                card.className = "card " + (MODES[m].cls || "");
+
+                document
+                    .getElementById("tw")
+                    .classList.toggle("active", m === "work");
+                document
+                    .getElementById("ts")
+                    .classList.toggle("active", m === "short");
+                document
+                    .getElementById("tl")
+                    .classList.toggle("active", m === "long");
+
+                mlEl.textContent = MODES[m].lbl;
+                logoEl.textContent = MODES[m].icon;
+
+                updDisp();
+                updRing();
+                updDots();
+            }
+
+            /* ───────────────────────────────────────────────────────
+   SOUND TOGGLE
+─────────────────────────────────────────────────────── */
+            function toggleSound() {
+                soundOn = !soundOn;
+                tog.classList.toggle("on", soundOn);
+            }
+
+            /* ───────────────────────────────────────────────────────
+   TOAST
+─────────────────────────────────────────────────────── */
+            function showToast(icon, msg) {
+                tIcon.textContent = icon;
+                tMsg.textContent = msg;
+                toastEl.classList.add("show");
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(
+                    () => toastEl.classList.remove("show"),
+                    3600,
+                );
+            }
+
+            /* ───────────────────────────────────────────────────────
+   TASKS
+─────────────────────────────────────────────────────── */
+            function addTask() {
+                const v = tinp.value.trim();
+                if (!v) return;
+                tasks.push({ id: nid++, text: v, done: false, pom: 0 });
+                tinp.value = "";
+                renderTasks();
+            }
+
+            function toggleDone(id) {
+                const t = tasks.find((x) => x.id === id);
+                if (t) t.done = !t.done;
+                renderTasks();
+            }
+
+            function deleteTask(id) {
+                tasks = tasks.filter((x) => x.id !== id);
+                if (activeId === id) activeId = null;
+                renderTasks();
+            }
+
+            function selectTask(id) {
+                activeId = activeId === id ? null : id;
+                renderTasks();
+            }
+
+            function renderTasks() {
+                if (!tasks.length) {
+                    tlist.innerHTML =
+                        '<div class="empty">' +
+                        '<span class="eicon">📝</span>' +
+                        "Belum ada tugas. Tambahkan satu!" +
+                        "</div>";
+                    return;
+                }
+                tlist.innerHTML = "";
+                tasks.forEach((t) => {
+                    const el = document.createElement("div");
+                    el.className =
+                        "ti" +
+                        (t.done ? " done" : "") +
+                        (t.id === activeId ? " act" : "");
+
+                    el.innerHTML =
+                        '<div class="tchk"></div>' +
+                        '<div class="ttxt">' +
+                        esc(t.text) +
+                        "</div>" +
+                        '<div class="tpom">🍅 ' +
+                        t.pom +
+                        "</div>" +
+                        '<button class="tdel" title="Hapus">✕</button>';
+
+                    el.querySelector(".tchk").addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        toggleDone(t.id);
+                    });
+                    el.querySelector(".tdel").addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        deleteTask(t.id);
+                    });
+                    el.addEventListener("click", () => selectTask(t.id));
+                    tlist.appendChild(el);
+                });
+            }
+
+            function esc(s) {
+                return s
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;");
+            }
+
+            /* ───────────────────────────────────────────────────────
+   FIX: stray </span> in header HTML
+─────────────────────────────────────────────────────── */
+
+            /* ───────────────────────────────────────────────────────
+   INIT
+─────────────────────────────────────────────────────── */
+            updDisp();
+            updRing();
+            updDots();
+            renderTasks();
+        </script>
+    </body>
+</html>
