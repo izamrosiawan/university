@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview - SDN Wonokromo III</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #6f8250;
+            --secondary-color: #ffffff;
+            --accent-color: #8fa669;
+            --light-color: #ecf0f1;
+            --white: #ffffff;
+            --text-color: #6f8250;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo h2 {
+            font-size: 1.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--secondary-color);
+            border-bottom-color: var(--secondary-color);
+        }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: var(--white);
+            padding: 4rem 0;
+            text-align: center;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* QUICK ACCESS */
+        .quick-access {
+            background-color: var(--white);
+            padding: 3rem 0;
+            margin: 2rem 0;
+        }
+
+        .quick-access h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .quick-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background-color: var(--light-color);
+            text-decoration: none;
+            color: var(--text-color);
+            border-radius: 10px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .quick-btn:hover {
+            background-color: var(--secondary-color);
+            color: var(--white);
+            transform: translateY(-5px);
+        }
+
+        .quick-btn .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .quick-btn span:last-child {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* WELCOME */
+        .welcome-section {
+            background-color: var(--white);
+            padding: 3rem 0;
+            margin: 2rem 0;
+        }
+
+        .welcome-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .welcome-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+
+        .welcome-text h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .welcome-text .title {
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .welcome-text p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        /* PROGRAMS */
+        .featured-program {
+            background-color: var(--light-color);
+            padding: 3rem 0;
+            margin: 2rem 0;
+        }
+
+        .featured-program h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .program-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .program-card {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .program-card:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .program-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .program-card p {
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .btn-learn-more {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* NEWS */
+        .news-section {
+            padding: 3rem 0;
+        }
+
+        .news-section h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .news-card {
+            background-color: var(--white);
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .news-card:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .news-content {
+            padding: 1.5rem;
+        }
+
+        .category {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background-color: var(--secondary-color);
+            color: var(--white);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .news-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .date {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .news-content p {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        /* FOOTER */
+        .footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 3rem 0 1rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--light-color);
+            text-decoration: none;
+        }
+
+        .footer-section a:hover {
+            color: var(--secondary-color);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .preview-badge {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: var(--secondary-color);
+            color: var(--white);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: bold;
+            z-index: 999;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .welcome-content,
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .button-grid,
+            .program-grid,
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-badge">📱 PREVIEW TEMA</div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h2>SDN Wonokromo III</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#" class="active">Beranda</a></li>
+                <li><a href="#">Profil Sekolah</a></li>
+                <li><a href="#">Galeri Kegiatan</a></li>
+                <li><a href="#">Berita & Pengumuman</a></li>
+                <li><a href="#">Kontak & Lokasi</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div>
+            <h1>Selamat Datang di SDN Wonokromo III</h1>
+            <p>Membangun Generasi Penerus Bangsa yang Berkarakter dan Berprestasi</p>
+        </div>
+    </section>
+
+    <!-- Quick Access -->
+    <section class="quick-access">
+        <div class="container">
+            <h2>Akses Cepat</h2>
+            <div class="button-grid">
+                <div class="quick-btn">
+                    <span class="icon">📋</span>
+                    <span>PPDB</span>
+                </div>
+                <div class="quick-btn">
+                    <span class="icon">📞</span>
+                    <span>Kontak</span>
+                </div>
+                <div class="quick-btn">
+                    <span class="icon">🏫</span>
+                    <span>Profil Sekolah</span>
+                </div>
+                <div class="quick-btn">
+                    <span class="icon">📸</span>
+                    <span>Galeri</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+        <div class="container">
+            <div class="welcome-content">
+                <div class="welcome-image"></div>
+                <div class="welcome-text">
+                    <h2>Sambutan Kepala Sekolah</h2>
+                    <p class="title">Ibu/Bapak Kepala Sekolah</p>
+                    <p>"Assalamu'alaikum Warahmatullahi Wabarakatuh. Selamat datang di SDN Wonokromo III, institusi pendidikan yang berkomitmen untuk menghasilkan siswa-siswi yang tidak hanya pandai dalam akademik, tetapi juga memiliki karakter yang kuat.</p>
+                    <p>Kami percaya bahwa pendidikan adalah fondasi masa depan bangsa. Dengan dukungan orang tua dan masyarakat, kami terus berinovasi dan meningkatkan kualitas pembelajaran untuk menciptakan generasi penerus yang berkualitas."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Program Unggulan -->
+    <section class="featured-program">
+        <div class="container">
+            <h2>Program Unggulan</h2>
+            <div class="program-grid">
+                <div class="program-card">
+                    <h3>Program Gemilang</h3>
+                    <p>Program pembelajaran inovatif yang menggabungkan teknologi dan metode tradisional untuk hasil maksimal.</p>
+                    <a href="#" class="btn-learn-more">Pelajari Lebih Lanjut →</a>
+                </div>
+                <div class="program-card">
+                    <h3>Pendidikan Karakter</h3>
+                    <p>Pembentukan karakter siswa melalui kegiatan Pancasila dan pengalaman belajar yang bermakna.</p>
+                    <a href="#" class="btn-learn-more">Pelajari Lebih Lanjut →</a>
+                </div>
+                <div class="program-card">
+                    <h3>Ekstrakurikuler Beragam</h3>
+                    <p>Berbagai pilihan ekstrakurikuler untuk mengembangkan bakat dan minat siswa di luar akademik.</p>
+                    <a href="#" class="btn-learn-more">Pelajari Lebih Lanjut →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section class="news-section">
+        <div class="container">
+            <h2>Berita Terbaru</h2>
+            <div class="news-grid">
+                <div class="news-card">
+                    <div class="news-image"></div>
+                    <div class="news-content">
+                        <span class="category">Berita</span>
+                        <h3>Peluncuran Program Gemilang 2026</h3>
+                        <p class="date">15 Maret 2026</p>
+                        <p>SDN Wonokromo III dengan bangga meluncurkan Program Gemilang 2026, sebuah inisiatif pendidikan yang menggabungkan teknologi terkini dengan metode pembelajaran tradisional.</p>
+                    </div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                    <div class="news-content">
+                        <span class="category">Berita</span>
+                        <h3>Kunjungan Edukatif ke Museum</h3>
+                        <p class="date">12 Maret 2026</p>
+                        <p>Siswa kelas 5 dan 6 melakukan kunjungan edukatif ke Museum Nasional Indonesia untuk mempelajari sejarah dan budaya bangsa secara langsung.</p>
+                    </div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
+                    <div class="news-content">
+                        <span class="category">Pengumuman</span>
+                        <h3>Launching Perpustakaan Digital</h3>
+                        <p class="date">10 Maret 2026</p>
+                        <p>Perpustakaan digital sekolah telah diluncurkan dengan akses ke ribuan buku digital dan sumber pembelajaran online untuk siswa.</p>
+                    </div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-image" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);"></div>
+                    <div class="news-content">
+                        <span class="category">Agenda</span>
+                        <h3>Program Literasi Pancasila</h3>
+                        <p class="date">8 Maret 2026</p>
+                        <p>Sekolah mulai melaksanakan program literasi Pancasila sebagai bagian dari pendidikan karakter untuk mengembangkan siswa yang berjiwa Pancasila.</p>
+                    </div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-image" style="background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%);"></div>
+                    <div class="news-content">
+                        <span class="category">Prestasi</span>
+                        <h3>Juara Olimpiade Matematika</h3>
+                        <p class="date">5 Maret 2026</p>
+                        <p>Tim siswa SDN Wonokromo III berhasil meraih medali emas di ajang Olimpiade Matematika Nasional. Selamat kepada semua siswa berprestasi!</p>
+                    </div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                    <div class="news-content">
+                        <span class="category">Berita</span>
+                        <h3>Renovasi Ruang Kelas Selesai</h3>
+                        <p class="date">1 Maret 2026</p>
+                        <p>Renovasi ruang kelas telah selesai dilakukan dengan penambahan fasilitas modern untuk mendukung proses pembelajaran yang lebih baik.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Tentang Kami</h4>
+                    <p>SDN Wonokromo III adalah institusi pendidikan yang berkomitmen untuk memberikan pendidikan berkualitas tinggi dengan nilai-nilai karakter yang kuat.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Tautan Cepat</h4>
+                    <ul>
+                        <li><a href="#">Beranda</a></li>
+                        <li><a href="#">Profil Sekolah</a></li>
+                        <li><a href="#">Galeri</a></li>
+                        <li><a href="#">Berita</a></li>
+                        <li><a href="#">Kontak</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Kontak Kami</h4>
+                    <p>📞 Telepon: (021) 123-4567</p>
+                    <p>📧 Email: info@sdnwonokromo3.sch.id</p>
+                    <p>📍 Jalan Pendidikan No. 123, Jakarta</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 SDN Wonokromo III. Semua hak dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
