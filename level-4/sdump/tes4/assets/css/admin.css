@@ -1,0 +1,24 @@
+/* Admin Styles */
+.wp-admin .toplevel_page_sdn-wonokromo {
+    color: #2c3e50;
+}
+
+/* Custom admin columns */
+.wp-list-table .column-date,
+.wp-list-table .column-author {
+    width: 15%;
+}
+
+/* Widget admin styling */
+.widget-top {
+    background-color: #f9f9f9;
+}
+
+/* Notice styles */
+.notice.notice-sdn {
+    border-left: 4px solid #2c3e50;
+}
+
+.notice.notice-sdn p {
+    color: #2c3e50;
+}

@@ -1,0 +1,21 @@
+{
+  "name": "SDN Wonokromo III WordPress Theme",
+  "description": "WordPress theme untuk SDN Wonokromo III",
+  "version": "1.0.0",
+  "author": "Development Team",
+  "license": "GPL-2.0-or-later",
+  "type": "wordpress-theme",
+  "keywords": [
+    "wordpress",
+    "theme",
+    "responsive",
+    "school",
+    "education"
+  ],
+  "requires": {
+    "php": "7.4",
+    "wordpress": "5.0"
+  },
+  "textdomain": "sdn-wonokromo",
+  "domainpath": "/languages"
+}
